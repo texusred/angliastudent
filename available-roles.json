@@ -311,6 +311,14 @@
     "roleTitle": "Prayer and Worship Coordinator",
     "category": "Faith and Welfare"
   },
+{
+  "postTitle": "Christian Union - Cambridge - Administrator",
+  "campus": "Cambridge", 
+  "places": 1,
+  "societyName": "Christian Union",
+  "roleTitle": "Administrator",
+  "category": "Administrative"
+},
   {
     "postTitle": "Christian Union - Chelmsford - Christian Medical Fellowship Link",
     "campus": "Chelmsford",
@@ -479,6 +487,14 @@
     "roleTitle": "Administrator",
     "category": "Administrative"
   },
+{
+  "postTitle": "Dive - Social Media Coordinator",
+  "campus": "Cambridge",
+  "places": 1, 
+  "societyName": "Dive",
+  "roleTitle": "Social Media Coordinator",
+  "category": "Communications"
+},
   {
     "postTitle": "Dive - Vice-President",
     "campus": "Cambridge",
@@ -991,6 +1007,14 @@
     "roleTitle": "Vice President",
     "category": "Vice President"
   },
+{
+  "postTitle": "Indian - Cambridge - Secretary",
+  "campus": "Cambridge",
+  "places": 1,
+  "societyName": "Indian",
+  "roleTitle": "Secretary", 
+  "category": "Administrative"
+},
   {
     "postTitle": "I Am Going Home After This - Administrator",
     "campus": "Cambridge",
@@ -1695,6 +1719,14 @@
     "roleTitle": "Operations Assistant",
     "category": "Administrative"
   },
+{
+  "postTitle": "Pole Fitness - Cambridge - Social Secretary", 
+  "campus": "Cambridge",
+  "places": 1,
+  "societyName": "Pole Fitness", 
+  "roleTitle": "Social Secretary",
+  "category": "Events and Socials"
+},
   {
     "postTitle": "Pole Fitness - Chelmsford - Events Officer",
     "campus": "Chelmsford",
