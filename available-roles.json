@@ -136,6 +136,14 @@
     "category": "Communications"
   },
   {
+    "postTitle": "Arts & Crafts - Vice-President",
+    "campus": "Cambridge",
+    "places": 1,
+    "societyName": "Arts & Crafts",
+    "roleTitle": "Vice-President",
+    "category": "Vice-President"
+  },
+  {
     "postTitle": "Astronomy - Treasurer",
     "campus": "Cambridge",
     "places": 1,
@@ -520,6 +528,14 @@
     "category": "Campaigns"
   },
   {
+    "postTitle": "Ecology & Conservation - Treasurer",
+    "campus": "Cambridge",
+    "places": 1,
+    "societyName": "Ecology & Conservation",
+    "roleTitle": "Treasurer",
+    "category": "Treasurer"
+  },
+  {
     "postTitle": "ElectHER - Treasurer",
     "campus": "Cambridge",
     "places": 1,
@@ -838,6 +854,14 @@
     "societyName": "Forensics & Crime",
     "roleTitle": "Treasurer",
     "category": "Treasurer"
+  },
+  {
+    "postTitle": "Forensics & Crime - Cambridge - Vice-President",
+    "campus": "Cambridge",
+    "places": 1,
+    "societyName": "Forensics & Crime",
+    "roleTitle": "Vice-President",
+    "category": "Vice-President"
   },
   {
     "postTitle": "Gastroenterology - Secretary",
@@ -1166,6 +1190,14 @@
     "societyName": "Krishna Society",
     "roleTitle": "Treasurer",
     "category": "Treasurer"
+  },
+  {
+    "postTitle": "Law - Cambridge - Secretary",
+    "campus": "Chelmsford",
+    "places": 1,
+    "societyName": "Law",
+    "roleTitle": "Secretary",
+    "category": "Administrative"
   },
   {
     "postTitle": "Law - Chelmsford - Events Officer",
@@ -1968,12 +2000,28 @@
     "category": "Communications"
   },
   {
+    "postTitle": "Ruskin Journal - Cambridge - Journalist",
+    "campus": "Cambridge",
+    "places": 1,
+    "societyName": "Ruskin Journal",
+    "roleTitle": "Journalist",
+    "category": "Communications"
+  },
+  {
     "postTitle": "Ruskin Journal - Cambridge - Social Media Officer",
     "campus": "Cambridge",
     "places": 1,
     "societyName": "Ruskin Journal",
     "roleTitle": "Social Media Officer",
     "category": "Communications"
+  },
+  {
+    "postTitle": "Ruskin Journal - Cambridge - Treasurer",
+    "campus": "Cambridge",
+    "places": 1,
+    "societyName": "Ruskin Journal",
+    "roleTitle": "Treasurer",
+    "category": "Treasurer"
   },
   {
     "postTitle": "Sikh Society - Chelmsford - Events Officer",
