@@ -176,14 +176,6 @@
     "category": "Communications"
   },
   {
-    "postTitle": "Book Club ARU - Administrator",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Book Club ARU",
-    "roleTitle": "Administrator",
-    "category": "Administrative"
-  },
-  {
     "postTitle": "British Comedy - President",
     "campus": "Cambridge",
     "places": 1,
@@ -358,22 +350,6 @@
     "societyName": "City of Peace Christian Fellowship",
     "roleTitle": "Treasurer",
     "category": "Treasurer"
-  },
-  {
-    "postTitle": "Commonwealth of Independent States (CIS) - Treasurer",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Commonwealth of Independent States (CIS)",
-    "roleTitle": "Treasurer",
-    "category": "Treasurer"
-  },
-  {
-    "postTitle": "Commonwealth of Independent States (CIS) - Vice President",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Commonwealth of Independent States (CIS)",
-    "roleTitle": "Vice President",
-    "category": "Vice President"
   },
   {
     "postTitle": "Computer Science - Events Officer",
@@ -608,14 +584,6 @@
     "category": "Treasurer"
   },
   {
-    "postTitle": "eSports - Social Media Administrator",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "eSports",
-    "roleTitle": "Social Media Administrator",
-    "category": "Communications"
-  },
-  {
     "postTitle": "Ethereal Minds - President",
     "campus": "Cambridge",
     "places": 1,
@@ -828,14 +796,6 @@
     "campus": "Cambridge",
     "places": 1,
     "societyName": "Foodie",
-    "roleTitle": "Treasurer",
-    "category": "Treasurer"
-  },
-  {
-    "postTitle": "For the Girls - Treasurer",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "For the Girls",
     "roleTitle": "Treasurer",
     "category": "Treasurer"
   },
@@ -1230,14 +1190,6 @@
     "societyName": "Law",
     "roleTitle": "Vice President",
     "category": "Vice President"
-  },
-  {
-    "postTitle": "Lesbian - Treasurer",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Lesbian",
-    "roleTitle": "Treasurer",
-    "category": "Treasurer"
   },
   {
     "postTitle": "Lesbian - Vice President",
@@ -2118,14 +2070,6 @@
     "societyName": "Tabletop & Gaming Society (TAGS)",
     "roleTitle": "Administrator",
     "category": "Administrative"
-  },
-  {
-    "postTitle": "Tabletop & Gaming Society (TAGS) - Warmaster",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Tabletop & Gaming Society (TAGS)",
-    "roleTitle": "Warmaster",
-    "category": "Events and Socials"
   },
   {
     "postTitle": "Tamil - Chelmsford - Campaigns Officer",
