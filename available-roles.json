@@ -320,14 +320,6 @@
     "category": "Vice President"
   },
   {
-    "postTitle": "City of Peace Christian Fellowship - President",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "City of Peace Christian Fellowship",
-    "roleTitle": "President",
-    "category": "President"
-  },
-  {
     "postTitle": "City of Peace Christian Fellowship - Treasurer",
     "campus": "Cambridge",
     "places": 1,
@@ -624,14 +616,6 @@
     "category": "Events and Socials"
   },
   {
-    "postTitle": "Filipino - President",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Filipino",
-    "roleTitle": "President",
-    "category": "President"
-  },
-  {
     "postTitle": "Filipino - Treasurer",
     "campus": "Cambridge",
     "places": 1,
@@ -726,14 +710,6 @@
     "societyName": "First Aid",
     "roleTitle": "Treasurer",
     "category": "Treasurer"
-  },
-  {
-    "postTitle": "First Love - Cambridge - President",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "First Love",
-    "roleTitle": "President",
-    "category": "President"
   },
   {
     "postTitle": "First Love - Cambridge - Treasurer",
@@ -968,12 +944,20 @@
     "category": "Vice President"
   },
 {
-  "postTitle": "Indian - Cambridge - Secretary",
+  "postTitle": "Indian - Cambridge - Events Officer",
   "campus": "Cambridge",
   "places": 1,
   "societyName": "Indian",
-  "roleTitle": "Secretary", 
-  "category": "Administrative"
+  "roleTitle": "Events Officer", 
+  "category": "Events Officer"
+},
+{
+  "postTitle": "Indian - Cambridge - Social Media Officer",
+  "campus": "Cambridge",
+  "places": 1,
+  "societyName": "Indian",
+  "roleTitle": "Social Media Officer", 
+  "category": "Social Media Officer"
 },
   {
     "postTitle": "I Am Going Home After This - Administrator",
@@ -984,28 +968,12 @@
     "category": "Administrative"
   },
   {
-    "postTitle": "I Am Going Home After This - President",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "I Am Going Home After This",
-    "roleTitle": "President",
-    "category": "President"
-  },
-  {
     "postTitle": "I Am Going Home After This - Treasurer",
     "campus": "Cambridge",
     "places": 1,
     "societyName": "I Am Going Home After This",
     "roleTitle": "Treasurer",
     "category": "Treasurer"
-  },
-  {
-    "postTitle": "Inter-Collegiate Prayer Fellowship - President",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Inter-Collegiate Prayer Fellowship",
-    "roleTitle": "President",
-    "category": "President"
   },
   {
     "postTitle": "International Business - President",
@@ -1504,14 +1472,6 @@
     "category": "Events and Socials"
   },
   {
-    "postTitle": "Optics Society (OpSoc) - Cambridge - Campaigns Officer",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Optics Society (OpSoc)",
-    "roleTitle": "Campaigns Officer",
-    "category": "Campaigns"
-  },
-  {
     "postTitle": "Pagan - President",
     "campus": "Cambridge",
     "places": 1,
@@ -1776,14 +1736,6 @@
     "category": "President"
   },
   {
-    "postTitle": "Psychology - Cambridge - Treasurer",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Psychology",
-    "roleTitle": "Treasurer",
-    "category": "Treasurer"
-  },
-  {
     "postTitle": "Psychology - Cambridge - Vice President",
     "campus": "Cambridge",
     "places": 1,
@@ -1830,14 +1782,6 @@
     "societyName": "Queer Collective",
     "roleTitle": "Events Coordinator",
     "category": "Events and Socials"
-  },
-  {
-    "postTitle": "Queer Collective - President",
-    "campus": "Cambridge",
-    "places": 1,
-    "societyName": "Queer Collective",
-    "roleTitle": "President",
-    "category": "President"
   },
   {
     "postTitle": "Queer Collective - Treasurer",
