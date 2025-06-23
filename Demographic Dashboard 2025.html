@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARU Students' Union Demographics Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .header-btn {
+            background: white;
+            border: 2px solid #00a5b4;
+            color: #00a5b4;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .header-btn:hover {
+            background: #00a5b4;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,165,180,0.3);
+        }
+        
+        .header-btn.secondary {
+            border-color: #595959;
+            color: #595959;
+        }
+        
+        .header-btn.secondary:hover {
+            background: #595959;
+            color: white;
+            box-shadow: 0 4px 12px rgba(89,89,89,0.3);
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: #00a5b4;
+        }
+        
+        .brand-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .aru-logo {
+            height: 60px;
+            width: auto;
+            margin-bottom: 10px;
+        }
+        
+        .brand-tagline {
+            color: #00a5b4;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #595959;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .total-members {
+            display: inline-block;
+            background: #00a5b4;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        /* Welcome State Styles */
+        .welcome-state {
+            text-align: center;
+            background: white;
+            border-radius: 15px;
+            padding: 60px 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #00a5b4;
+        }
+        
+        .welcome-title {
+            font-size: 2rem;
+            color: #595959;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .welcome-description {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .upload-area {
+            background: white;
+            border: 3px dashed #bdc3c7;
+            border-radius: 15px;
+            padding: 50px 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .upload-area:hover {
+            border-color: #00a5b4;
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .upload-area.dragover {
+            border-color: #77bc1f;
+            background: #e8f5e8;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #00a5b4;
+            margin-bottom: 20px;
+        }
+        
+        .upload-text {
+            font-size: 1.3rem;
+            color: #595959;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .upload-subtext {
+            color: #7f8c8d;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .file-requirements {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+        
+        .file-requirements h4 {
+            color: #595959;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .file-requirements ul {
+            color: #7f8c8d;
+            padding-left: 20px;
+        }
+        
+        .file-requirements li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .current-data-info {
+            background: #e8f5e8;
+            border: 1px solid #77bc1f;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #77bc1f;
+            font-weight: 500;
+            display: none;
+        }
+        
+        .processing {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #856404;
+            display: none;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #dc3545;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #721c24;
+            display: none;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #155724;
+            display: none;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .navigation {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            color: #595959;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .nav-btn.active {
+            background: #77bc1f;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .dashboard-content {
+            display: none;
+        }
+        
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 1024px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #595959;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+        }
+        
+        .data-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .table-header {
+            background: #00a5b4;
+            color: white;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .table-content {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #595959;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 4px solid #00a5b4;
+        }
+        
+        .stat-card.green {
+            border-top-color: #77bc1f;
+        }
+        
+        .stat-card.yellow {
+            border-top-color: #f2e400;
+        }
+        
+        .stat-card.grey {
+            border-top-color: #595959;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #595959;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            border-top: 3px solid #f2e400;
+        }
+        
+        .sample-data-btn {
+            background: #77bc1f;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        
+        /* Print Styles for PDF Export */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                background: white !important;
+                font-size: 12pt;
+                line-height: 1.4;
+                color: black !important;
+            }
+            
+            .container {
+                max-width: none;
+                margin: 0;
+                padding: 15mm;
+            }
+            
+            /* Hide elements not needed in print */
+            .welcome-state,
+            .upload-area,
+            .current-data-info,
+            .processing,
+            .error-message,
+            .success-message,
+            .navigation,
+            .header-controls,
+            .charts-container {
+                display: none !important;
+            }
+            
+            /* Show only print content */
+            .print-content {
+                display: block !important;
+            }
+            
+            .header {
+                box-shadow: none;
+                border: none;
+                margin-bottom: 20pt;
+                page-break-inside: avoid;
+            }
+            
+            .header::before {
+                display: none;
+            }
+            
+            .brand-tagline {
+                color: #666 !important;
+            }
+            
+            .total-members {
+                background: #f5f5f5 !important;
+                color: black !important;
+                border: 1pt solid #ddd;
+            }
+            
+            .print-section {
+                page-break-inside: avoid;
+                margin-bottom: 25pt;
+                border-bottom: 1pt solid #ddd;
+                padding-bottom: 15pt;
+            }
+            
+            .print-section:last-child {
+                border-bottom: none;
+            }
+            
+            .print-section h3 {
+                color: black !important;
+                font-size: 14pt;
+                margin-bottom: 10pt;
+                border-bottom: 2pt solid #ccc;
+                padding-bottom: 5pt;
+            }
+            
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 15pt;
+                font-size: 10pt;
+            }
+            
+            .print-table th,
+            .print-table td {
+                padding: 6pt 8pt;
+                border: 1pt solid #ddd;
+                text-align: left;
+            }
+            
+            .print-table th {
+                background: #f5f5f5 !important;
+                color: black !important;
+                font-weight: bold;
+            }
+            
+            .print-table td:nth-child(2),
+            .print-table td:nth-child(3) {
+                text-align: right;
+            }
+            
+            .print-summary {
+                margin-bottom: 25pt;
+                page-break-inside: avoid;
+            }
+            
+            .print-summary-grid {
+                display: table;
+                width: 100%;
+                border-collapse: collapse;
+            }
+            
+            .print-summary-item {
+                display: table-cell;
+                width: 50%;
+                padding: 10pt;
+                border: 1pt solid #ddd;
+                text-align: center;
+                background: #f9f9f9 !important;
+            }
+            
+            .print-summary-value {
+                font-size: 18pt;
+                font-weight: bold;
+                color: black !important;
+                margin-bottom: 5pt;
+            }
+            
+            .print-summary-label {
+                color: #666 !important;
+                font-size: 10pt;
+            }
+            
+            .footer {
+                margin-top: 30pt;
+                padding-top: 15pt;
+                border-top: 2pt solid #ddd;
+                font-size: 10pt;
+                color: #666 !important;
+                page-break-inside: avoid;
+            }
+            
+            /* Ensure page breaks work well */
+            .page-break-before {
+                page-break-before: always;
+            }
+            
+            .page-break-after {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-controls" id="headerControls" style="display: none;">
+                <button class="header-btn" onclick="downloadPDF()">Download PDF</button>
+                <button class="header-btn secondary" onclick="returnToWelcome()">Upload New Data</button>
+            </div>
+            
+            <div class="brand-section">
+                <img src="https://www.angliastudent.com/pageassets/brand/sulogos/3815-ARUSU-Logo-cmyk.png" alt="ARU Students' Union" class="aru-logo">
+            </div>
+            <div class="brand-tagline">Five Campuses, One Union</div>
+            <h1>Demographics Dashboard</h1>
+            <p class="subtitle">Interactive analysis of student demographics data</p>
+            <div class="total-members" id="totalMembersDisplay" style="display: none;">0 Total Members</div>
+        </div>
+
+        <!-- Welcome State -->
+        <div class="welcome-state" id="welcomeState">
+            <div class="welcome-icon">📊</div>
+            <h2 class="welcome-title">Welcome to the Demographics Dashboard</h2>
+            <p class="welcome-description">
+                Upload your ARU Grouping Demographics Report to visualize and analyze student data with interactive charts, detailed breakdowns, and comprehensive statistics.
+            </p>
+            
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">📁</div>
+                <div class="upload-text">Drop your Excel file here</div>
+                <div class="upload-subtext">or click to browse files<br><small>Supports .xlsx and .xls formats</small></div>
+                <input type="file" id="fileInput" accept=".xlsx,.xls" />
+            </div>
+            
+            <div class="file-requirements">
+                <h4>📋 File Requirements</h4>
+                <ul>
+                    <li>Must be an ARU Grouping Demographics Report (.xlsx or .xls)</li>
+                    <li>Should contain sections like Age range, Faculty name, Nationality, etc.</li>
+                    <li>Data will be automatically parsed and categorized</li>
+                    <li>Categories with fewer than 50 members will be grouped as "Other"</li>
+                </ul>
+            </div>
+            
+
+        </div>
+
+        <!-- Status Messages -->
+        <div class="current-data-info" id="currentDataInfo">
+            📊 Currently showing data from: <span id="currentDataDate"></span>
+        </div>
+        
+        <div class="processing" id="processingMessage">
+            ⏳ Processing file... Please wait
+        </div>
+        
+        <div class="error-message" id="errorMessage">
+            ❌ <span id="errorText"></span>
+        </div>
+        
+        <div class="success-message" id="successMessage">
+            ✅ Data loaded successfully! Report date: <span id="newReportDate"></span>
+        </div>
+
+        <!-- Dashboard Content (Hidden Initially) -->
+        <div class="dashboard-content" id="dashboardContent">
+            <!-- Navigation -->
+            <div class="navigation" id="navigation">
+                <!-- Navigation buttons will be generated by JavaScript -->
+            </div>
+
+            <!-- Charts Container -->
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3 class="chart-title" id="pieChartTitle">Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3 class="chart-title" id="barChartTitle">Breakdown</h3>
+                    <div class="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-grid" id="statsGrid">
+                <!-- Stats will be generated by JavaScript -->
+            </div>
+
+            <!-- Data Table -->
+            <div class="data-table">
+                <div class="table-header" id="tableHeader">Detailed View</div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th style="text-align: right;">Members</th>
+                                <th style="text-align: right;">Percentage</th>
+                                <th style="text-align: center;">Distribution</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Table rows will be generated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Print-Only Content (Hidden on Screen) -->
+        <div class="print-content" id="printContent" style="display: none;">
+            <!-- Print content will be generated by JavaScript -->
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>A student-powered union where every voice matters, every campus connects, and good vibes are part of the culture.</p>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let demographicsData = {};
+        let currentSection = "";
+        let pieChart = null;
+        let barChart = null;
+        let currentReportDate = "";
+        let currentCampusInfo = "";
+        
+        // Color schemes for each section using ARU brand colors
+        const colorSchemes = {
+            "Age range": ['#00a5b4', '#77bc1f', '#f2e400', '#595959', '#dbdbe0'],
+            "Degree apprentice": ['#00a5b4', '#77bc1f', '#f2e400'],
+            "Faculty name": ['#00a5b4', '#77bc1f', '#f2e400', '#595959'],
+            "Mode of study": ['#00a5b4', '#77bc1f', '#f2e400', '#595959', '#dbdbe0', '#00a5b4'],
+            "Nationality": ['#00a5b4', '#77bc1f', '#f2e400', '#595959', '#dbdbe0', '#00a5b4', '#77bc1f', '#f2e400', '#595959', '#dbdbe0', '#00a5b4', '#77bc1f', '#f2e400', '#595959', '#dbdbe0', '#00a5b4', '#77bc1f', '#f2e400'],
+            "Sex": ['#00a5b4', '#77bc1f', '#f2e400'],
+            "Level of study": ['#00a5b4', '#77bc1f', '#f2e400', '#595959', '#dbdbe0', '#00a5b4', '#77bc1f', '#f2e400', '#595959'],
+            "Student type": ['#00a5b4', '#77bc1f', '#f2e400', '#595959'],
+            "Year of study": ['#00a5b4', '#77bc1f', '#f2e400', '#595959', '#dbdbe0']
+        };
+
+        // Initialize the dashboard
+        function init() {
+            setupFileUpload();
+            loadFromStorage();
+        }
+
+        // Load data from localStorage if available
+        function loadFromStorage() {
+            const savedData = localStorage.getItem('aruDemographicsData');
+            const savedDate = localStorage.getItem('aruReportDate');
+            const savedCampus = localStorage.getItem('aruCampusInfo');
+            
+            if (savedData && savedDate) {
+                try {
+                    demographicsData = JSON.parse(savedData);
+                    currentReportDate = savedDate;
+                    currentCampusInfo = savedCampus || "";
+                    
+                    if (Object.keys(demographicsData).length > 0) {
+                        showDashboard();
+                    }
+                } catch (error) {
+                    console.error('Error loading saved data:', error);
+                    localStorage.removeItem('aruDemographicsData');
+                    localStorage.removeItem('aruReportDate');
+                    localStorage.removeItem('aruCampusInfo');
+                }
+            }
+        }
+
+        // Save data to localStorage
+        function saveToStorage() {
+            try {
+                localStorage.setItem('aruDemographicsData', JSON.stringify(demographicsData));
+                localStorage.setItem('aruReportDate', currentReportDate);
+                localStorage.setItem('aruCampusInfo', currentCampusInfo);
+            } catch (error) {
+                console.error('Error saving data to storage:', error);
+            }
+        }
+
+        // Download dashboard as PDF (using browser print)
+        function downloadPDF() {
+            if (Object.keys(demographicsData).length === 0) {
+                showError('No data available to download');
+                return;
+            }
+
+            try {
+                // Generate print-friendly content
+                generatePrintContent();
+                
+                // Trigger browser print dialog
+                window.print();
+                
+            } catch (error) {
+                console.error('Error preparing print content:', error);
+                showError('Failed to prepare PDF. Please try again.');
+            }
+        }
+
+        // Generate print-friendly content
+        function generatePrintContent() {
+            const printContent = document.getElementById('printContent');
+            
+            let html = `
+                <div class="print-summary">
+                    <h2 style="color: black; font-size: 18pt; margin-bottom: 15pt; text-align: center;">Summary</h2>
+                    <div class="print-summary-grid">
+                        <div class="print-summary-item">
+                            <div class="print-summary-value">${Object.keys(demographicsData).length}</div>
+                            <div class="print-summary-label">Demographic Categories</div>
+                        </div>
+                        <div class="print-summary-item">
+                            <div class="print-summary-value">${calculateTotalMembers().toLocaleString()}</div>
+                            <div class="print-summary-label">Total Students</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add each demographic section
+            Object.entries(demographicsData).forEach(([sectionName, sectionData], sectionIndex) => {
+                const maxItem = sectionData.reduce((max, item) => item.percentage > max.percentage ? item : max);
+                
+                html += `
+                    <div class="print-section ${sectionIndex > 0 && sectionIndex % 2 === 0 ? 'page-break-before' : ''}">
+                        <h3>${sectionName}</h3>
+                        <p style="margin-bottom: 10pt; font-weight: bold;">
+                            Largest Group: ${maxItem.category} (${maxItem.percentage}% - ${maxItem.members.toLocaleString()} members)
+                        </p>
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Members</th>
+                                    <th>Percentage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${sectionData.map(item => `
+                                    <tr>
+                                        <td>${item.category}</td>
+                                        <td>${item.members.toLocaleString()}</td>
+                                        <td>${item.percentage}%</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            });
+            
+            printContent.innerHTML = html;
+        }
+
+        // Return to welcome state
+        function returnToWelcome() {
+            // Clear data
+            demographicsData = {};
+            currentSection = "";
+            currentReportDate = "";
+            currentCampusInfo = "";
+            
+            // Clear localStorage
+            localStorage.removeItem('aruDemographicsData');
+            localStorage.removeItem('aruReportDate');
+            localStorage.removeItem('aruCampusInfo');
+            
+            // Destroy existing charts
+            if (pieChart) {
+                pieChart.destroy();
+                pieChart = null;
+            }
+            if (barChart) {
+                barChart.destroy();
+                barChart = null;
+            }
+            
+            // Hide dashboard content and show welcome state
+            document.getElementById('dashboardContent').style.display = 'none';
+            document.getElementById('navigation').style.display = 'none';
+            document.getElementById('totalMembersDisplay').style.display = 'none';
+            document.getElementById('currentDataInfo').style.display = 'none';
+            document.getElementById('headerControls').style.display = 'none';
+            document.getElementById('welcomeState').style.display = 'block';
+            
+            // Clear any status messages
+            document.getElementById('processingMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+            
+            // Reset file input
+            document.getElementById('fileInput').value = '';
+        }
+
+        // Load sample data for demonstration
+        function loadSampleData() {
+            // Sample data from the original file
+            demographicsData = {
+                "Age range": [
+                    { category: "18 - 21", members: 4331, percentage: 46.75 },
+                    { category: "22 - 25", members: 2192, percentage: 23.66 },
+                    { category: "Over 30", members: 1783, percentage: 19.25 },
+                    { category: "26 - 30", members: 951, percentage: 10.27 },
+                    { category: "Other", members: 7, percentage: 0.08 }
+                ],
+                "Faculty name": [
+                    { category: "Faculty of Science and Engineering", members: 3628, percentage: 39.16 },
+                    { category: "Faculty of Health, Medicine and Social Care", members: 1913, percentage: 20.65 },
+                    { category: "Faculty of Business and Law", members: 1887, percentage: 20.37 },
+                    { category: "Faculty of Arts, Humanities, Education and Social Sciences", members: 1836, percentage: 19.82 }
+                ],
+                "Sex": [
+                    { category: "Female", members: 5228, percentage: 56.43 },
+                    { category: "Male", members: 3985, percentage: 43.02 },
+                    { category: "Unknown", members: 51, percentage: 0.55 }
+                ],
+                "Student type": [
+                    { category: "UG", members: 6685, percentage: 72.16 },
+                    { category: "Taught PG", members: 2273, percentage: 24.54 },
+                    { category: "Research", members: 297, percentage: 3.21 },
+                    { category: "Other", members: 9, percentage: 0.10 }
+                ]
+            };
+            
+            currentReportDate = "Sample Data - Cambridge Campus";
+            currentCampusInfo = "Sample Dataset for Demonstration";
+            
+            saveToStorage();
+            showDashboard();
+            showSuccess(currentReportDate);
+        }
+
+        // Setup file upload functionality
+        function setupFileUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+
+            // Handle drag and drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFile(files[0]);
+                }
+            });
+
+            // Handle file input change
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+        }
+
+        // Handle uploaded file
+        async function handleFile(file) {
+            // Validate file type
+            if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                showError('Please upload an Excel file (.xlsx or .xls)');
+                return;
+            }
+
+            showProcessing();
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, {
+                    cellStyles: true,
+                    cellFormulas: true,
+                    cellDates: true,
+                    cellNF: true,
+                    sheetStubs: true
+                });
+
+                // Extract data from the workbook
+                const newData = extractDemographicsFromWorkbook(workbook);
+                
+                if (newData.success) {
+                    // Update the global demographics data
+                    demographicsData = newData.data;
+                    currentReportDate = newData.reportDate || 'Unknown Date';
+                    currentCampusInfo = newData.campusInfo || 'Unknown Campus';
+                    
+                    // Save to localStorage
+                    saveToStorage();
+                    
+                    // Show the dashboard
+                    showDashboard();
+                    
+                    // Show success message
+                    showSuccess(currentReportDate);
+                } else {
+                    showError(newData.error || 'Failed to extract data from file');
+                }
+            } catch (error) {
+                console.error('Error processing file:', error);
+                showError('Error processing file. Please ensure it matches the expected ARU format.');
+            }
+        }
+
+        // Extract demographics data from workbook
+        function extractDemographicsFromWorkbook(workbook) {
+            try {
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
+
+                // Extract metadata
+                let reportDate = 'Unknown Date';
+                let campusInfo = 'Unknown Campus';
+                let totalMembers = 0;
+
+                // Look for report date in first few rows
+                for (let i = 0; i < Math.min(10, jsonData.length); i++) {
+                    const row = jsonData[i];
+                    if (row && row[0]) {
+                        const cellText = row[0].toString();
+                        if (cellText.includes('Report generated')) {
+                            reportDate = cellText.replace('Report generated ', '');
+                        } else if (cellText.includes('Campuses -') || cellText.includes('Campus')) {
+                            campusInfo = cellText;
+                        } else if (cellText.includes('Total number of individual members') && row[1]) {
+                            totalMembers = row[1];
+                        }
+                    }
+                }
+
+                // Extract section data
+                function extractSectionData(startRow, sectionName) {
+                    const data = [];
+                    let otherCount = 0;
+                    let otherPercentage = 0;
+                    
+                    for (let i = startRow + 2; i < jsonData.length; i++) {
+                        const row = jsonData[i];
+                        
+                        // Stop if we hit another section header or empty area
+                        if (!row || row.length === 0) break;
+                        
+                        // Check if this is the start of next section
+                        if (row[0] && typeof row[0] === 'string' && 
+                            i + 1 < jsonData.length && jsonData[i + 1] && 
+                            jsonData[i + 1][3] === "Members" && jsonData[i + 1][4] === "% of sample") {
+                            break;
+                        }
+                        
+                        // Extract data rows
+                        if (row[0] && row[1] === "" && row[2] === "" && 
+                            typeof row[3] === 'number' && typeof row[4] === 'number') {
+                            
+                            const members = row[3];
+                            const percentage = Math.round(row[4] * 100 * 100) / 100;
+                            
+                            // Skip meaningless categories
+                            if (row[0].includes('(No data)') || row[0].includes('(Data not current)')) {
+                                continue;
+                            }
+                            
+                            // Group small categories into "Other"
+                            if (members < 50) {
+                                otherCount += members;
+                                otherPercentage += row[4];
+                            } else {
+                                data.push({
+                                    category: row[0],
+                                    members: members,
+                                    percentage: percentage
+                                });
+                            }
+                        }
+                    }
+                    
+                    // Add "Other" category if there are items to group
+                    if (otherCount > 0) {
+                        data.push({
+                            category: "Other",
+                            members: otherCount,
+                            percentage: Math.round(otherPercentage * 100 * 100) / 100
+                        });
+                    }
+                    
+                    return data;
+                }
+
+                // Find and extract meaningful sections
+                const extractedData = {};
+                const skipSections = ["College name", "Status", "Campus", "Residency"]; // Usually 100% single values
+                
+                for (let i = 0; i < jsonData.length; i++) {
+                    const row = jsonData[i];
+                    if (row && row[0] && typeof row[0] === 'string' && 
+                        i + 1 < jsonData.length && jsonData[i + 1] && 
+                        jsonData[i + 1][3] === "Members" && jsonData[i + 1][4] === "% of sample") {
+                        
+                        const sectionName = row[0];
+                        
+                        // Skip sections that typically have only one category
+                        if (skipSections.includes(sectionName)) {
+                            continue;
+                        }
+                        
+                        const data = extractSectionData(i, sectionName);
+                        
+                        // Only include sections with multiple meaningful categories
+                        if (data.length > 1) {
+                            extractedData[sectionName] = data;
+                        }
+                    }
+                }
+
+                // Validate that we got some meaningful data
+                if (Object.keys(extractedData).length === 0) {
+                    return {
+                        success: false,
+                        error: 'No meaningful demographic sections found. Please check file format.'
+                    };
+                }
+
+                return {
+                    success: true,
+                    data: extractedData,
+                    reportDate: reportDate,
+                    campusInfo: campusInfo,
+                    totalMembers: totalMembers
+                };
+
+            } catch (error) {
+                console.error('Error parsing Excel file:', error);
+                return {
+                    success: false,
+                    error: 'Failed to parse Excel file. Please ensure it matches the expected ARU format.'
+                };
+            }
+        }
+
+        // Show dashboard (hide welcome state)
+        function showDashboard() {
+            document.getElementById('welcomeState').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+            document.getElementById('navigation').style.display = 'flex';
+            document.getElementById('totalMembersDisplay').style.display = 'inline-block';
+            document.getElementById('currentDataInfo').style.display = 'block';
+            document.getElementById('headerControls').style.display = 'flex';
+            
+            // Update info displays
+            document.getElementById('currentDataDate').textContent = currentReportDate;
+            
+            // Set first section as current
+            const sections = Object.keys(demographicsData);
+            if (sections.length > 0) {
+                currentSection = sections[0];
+                createNavigation();
+                updateDisplay();
+            }
+        }
+
+        // Show/hide status messages
+        function showProcessing() {
+            document.getElementById('processingMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+            document.getElementById('processingMessage').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showSuccess(reportDate) {
+            document.getElementById('newReportDate').textContent = reportDate;
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('processingMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 5000);
+        }
+
+        // Calculate total members from current data
+        function calculateTotalMembers() {
+            if (Object.keys(demographicsData).length === 0) return 0;
+            
+            // Use the first section to get total (they should all have the same total)
+            const firstSection = Object.values(demographicsData)[0];
+            return firstSection.reduce((sum, item) => sum + item.members, 0);
+        }
+
+        // Create navigation buttons
+        function createNavigation() {
+            const nav = document.getElementById('navigation');
+            nav.innerHTML = ''; // Clear existing buttons
+            
+            Object.keys(demographicsData).forEach(section => {
+                const btn = document.createElement('button');
+                btn.className = `nav-btn ${section === currentSection ? 'active' : ''}`;
+                btn.textContent = section;
+                btn.onclick = () => switchSection(section);
+                nav.appendChild(btn);
+            });
+        }
+
+        // Switch between sections
+        function switchSection(section) {
+            currentSection = section;
+            
+            // Update navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent === section);
+            });
+            
+            updateDisplay();
+        }
+
+        // Update all displays
+        function updateDisplay() {
+            updateCharts();
+            updateTable();
+            updateStats();
+            updateTotalMembers();
+        }
+
+        // Update total members display
+        function updateTotalMembers() {
+            const totalMembers = calculateTotalMembers();
+            document.getElementById('totalMembersDisplay').textContent = 
+                `${totalMembers.toLocaleString()} Total Members`;
+        }
+
+        // Update charts
+        function updateCharts() {
+            const data = demographicsData[currentSection];
+            if (!data || data.length === 0) return;
+            
+            const colors = colorSchemes[currentSection] || colorSchemes["Age range"];
+            
+            // Update titles
+            document.getElementById('pieChartTitle').textContent = `${currentSection} Distribution`;
+            document.getElementById('barChartTitle').textContent = `${currentSection} Breakdown`;
+            
+            // Destroy existing charts
+            if (pieChart) pieChart.destroy();
+            if (barChart) barChart.destroy();
+            
+            // Create pie chart
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: data.map(item => item.category),
+                    datasets: [{
+                        data: data.map(item => item.members),
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                generateLabels: function(chart) {
+                                    const chartData = chart.data;
+                                    if (chartData.labels.length && chartData.datasets.length) {
+                                        return chartData.labels.map((label, i) => {
+                                            const dataset = chartData.datasets[0];
+                                            const percentage = data[i].percentage;
+                                            return {
+                                                text: `${label}: ${percentage}%`,
+                                                fillStyle: dataset.backgroundColor[i],
+                                                strokeStyle: dataset.borderColor,
+                                                lineWidth: dataset.borderWidth,
+                                                hidden: false,
+                                                index: i
+                                            };
+                                        });
+                                    }
+                                    return [];
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = data[context.dataIndex];
+                                    return `${item.category}: ${item.members.toLocaleString()} (${item.percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Create bar chart
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.category),
+                    datasets: [{
+                        label: 'Members',
+                        data: data.map(item => item.members),
+                        backgroundColor: colors,
+                        borderColor: colors.map(color => color),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = data[context.dataIndex];
+                                    return `${item.category}: ${item.members.toLocaleString()} (${item.percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value >= 1000 ? (value/1000).toFixed(1) + 'k' : value;
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update data table
+        function updateTable() {
+            const data = demographicsData[currentSection];
+            if (!data || data.length === 0) return;
+            
+            const colors = colorSchemes[currentSection] || colorSchemes["Age range"];
+            
+            document.getElementById('tableHeader').textContent = `${currentSection} - Detailed View`;
+            
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.category}</td>
+                    <td style="text-align: right; font-weight: 600;">${item.members.toLocaleString()}</td>
+                    <td style="text-align: right;">${item.percentage}%</td>
+                    <td style="text-align: center;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${Math.max(item.percentage, 2)}%; background-color: ${colors[index % colors.length]};"></div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Update statistics
+        function updateStats() {
+            const data = demographicsData[currentSection];
+            if (!data || data.length === 0) return;
+            
+            const maxItem = data.reduce((max, item) => item.percentage > max.percentage ? item : max);
+            const minItem = data.reduce((min, item) => item.percentage < min.percentage ? item : min);
+            
+            const statsGrid = document.getElementById('statsGrid');
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${Object.keys(demographicsData).length}</div>
+                    <div class="stat-label">Total Categories</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-value">${data.length}</div>
+                    <div class="stat-label">Subcategories</div>
+                </div>
+                <div class="stat-card yellow">
+                    <div class="stat-value">${maxItem.percentage}%</div>
+                    <div class="stat-label">Largest Group</div>
+                </div>
+                <div class="stat-card grey">
+                    <div class="stat-value">${minItem.percentage}%</div>
+                    <div class="stat-label">Smallest Group</div>
+                </div>
+            `;
+        }
+
+        // Initialize when page loads
+        window.onload = init;
+    </script>
+</body>
+</html>
